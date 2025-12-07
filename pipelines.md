@@ -1,4 +1,4 @@
-# MRI-to-Mesh Pipelines for FEniCS
+# MRI-to-Mesh Pipelines for FEniCS(x)
 
 This document outlines the workflows used at Simula for converting raw MRI data into finite element meshes suitable for FEniCS/FEniCSx simulations. It covers current software choices, specific user pipelines, dataset locations, and future development needs.
 
@@ -32,7 +32,7 @@ Conversion of scanner output (typically DICOM) to research-standard formats (NIf
 ### Stage 2: Registration
 Aligning different image modalities (e.g., registering DTI to the T1 structural scan) or registering subjects to a common atlas (MNI).
 
-* **[Greedy]([https://sites.google.com/view/greedy-reg/](https://www.itksnap.org/pmwiki/pmwiki.php?n=SourceCode.SourceCode)):** Fast, effective for standard rigid/affine registration.
+* **[Greedy](https://www.itksnap.org/pmwiki/pmwiki.php?n=SourceCode.SourceCode):** Fast, effective for standard rigid/affine registration.
 * **[ANTs](http://stnava.github.io/ANTs/):** Gold standard for non-linear warping and complex registration.
 * **[FSL FLIRT](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FLIRT):** Robust linear registration (often used in `mri2mesh` pipelines).
 
@@ -147,17 +147,37 @@ A hypothetical workflow to go from raw scan to a Stokes + Advection-Diffusion si
 * **[OpenNeuro ds004478](https://openneuro.org/datasets/ds004478/versions/1.0.2):** Raw T1w and fMRI BOLD data.
 * **[MNI152](https://nist.mni.mcgill.ca/icbm-152-extended-nonlinear-atlases-2020/):** Standard template for registration testing.
 
+### Other data / software at Zenodo
+* [csftracermodeling/csftracermodeling: Submitted code](https://zenodo.org/records/10807300)
+* [The Gonzo Dataset: Human Brain MRI Data of CSF Tracer Evolution Over 72h For Data-Integrated Simulations](https://zenodo.org/records/14266867)
+* [Ratbrain mesh](https://zenodo.org/records/8138343)
+* [jorgenriseth/mri2fem-multicompartment: v2.1](https://zenodo.org/records/17488480)
+* [meg-simula/optimal-transport-fenics: v1.0.1](https://zenodo.org/records/10623496)
+* [Software for Mathematical modeling of the human brain - from magnetic resonance images to finite element simulation](https://zenodo.org/records/4899490)
+* [Software and data for "Advection versus diffusion in brain ventricular transport"](https://zenodo.org/records/15772431)
+* [Example meshes for 'Human brain solute transport quantified by glymphatic MRI-informed biophysics during sleep and sleep deprivation'](https://zenodo.org/records/8036492)
+* [Software and data for "In-silico molecular enrichment and clearance of the human intracranial space"](https://zenodo.org/records/14749163)
+* [Software and data for "Stretch and flow at the gliovascular interface: high-fidelity modelling of the mechanics of astrocyte endfeet"](https://zenodo.org/records/15303023)
+* [Human intracranial pulsatility during the cardiac cycle: a computational modelling framework](https://zenodo.org/records/6553790)
+* [Supplementary material (code) for Are brain displacements and pressures within the parenchyma induced by surface pressure differences? A computational modelling study by E. Piersanti, M. E. Rognes, V. Vinje](https://zenodo.org/records/10203549)
+* [Uncertainty quantification of parenchymal tracer distribution using random diffusion and convective velocity fields (data sets)](https://zenodo.org/records/3241364)
+* [Mesh files for idealized and image-based periarterial and perivenous spaces](https://zenodo.org/records/4629927)
+* [mechanisms-behind-pvs-flow-v1.0](https://zenodo.org/records/3890133)
+* [geometrically-reduced-PVS-flow-v1.0](https://zenodo.org/records/5729458)
+* [MRI2FEM data set](https://zenodo.org/records/4899120)
 ---
 
-## 5. Summary of resources
-
+## 5. Summary of repositories and other resources
+- MRI2FEM book: [paper](https://doi.org/10.1007/978-3-030-95136-8), [code](https://github.com/kent-and/mri2fem)
+- MRI2FEM2 book: To be announced
 - [MariusCausemann/intracranialPulsation](https://github.com/MariusCausemann/intracranialPulsation) - Paper repo (Legacy FEnICS + multiphenics)
 - [MariusCausemann/brain-PVS-SAS-transport](https://github.com/MariusCausemann/brain-PVS-SAS-transport) - Paper repo (Legacy FEnICS)
 - [gMRI2FEM](https://github.com/jorgenriseth/gMRI2FEM) - Tool for working with GMRI data (based on FEniCS, SVMTK and many other tools)
 - [pantarei](https://github.com/jorgenriseth/pantarei) - A collection of utilities for fluid flow modelling using FEniCS (legacy)
 - [Gonzo](https://github.com/jorgenriseth/gonzo) - Full pipline with dataset (based on gMRI2FEM)
-- [fenics-in-the-wild](https://github.com/scientificcomputing/fenics-in-the-wild) - Meshing with FtetWil
+- [fenics-in-the-wild](https://github.com/scientificcomputing/fenics-in-the-wild) - Meshing with FtetWild
 - [scifem](https://github.com/scientificcomputing/scifem) - Scientific finite element toolbox (also some biomedical) (FEniCSx)
 - [mri2mesh](https://github.com/scientificcomputing/mri2mesh) - Tools for converting images to mesh (PyVista + FEniCSx)
 - [bzapf/braintransport](https://github.com/bzapf/braintransport) - Paper repo (Legacy FEniCS + dolfin-adjoint)
 - [cdaversin/CerebroSpinalFlow](https://github.com/cdaversin/CerebroSpinalFlow) - Full pipeline in FEniCSx
+
