@@ -62,9 +62,8 @@ Classifying voxels into tissue types (White Matter, Gray Matter, CSF).
 ### Stage 4: Surface Extraction
 Converting voxel labels into triangular surface meshes (STL/PLY).
 
-* **SVMTK (Recommended for complex geometry):**
-    * Better at preserving deep sulci (valleys) which resolution-limited segmentations might smooth out.
-    * Superior for boolean operations (e.g., patching holes in ventricles) compared to PyVista.
+* **SVMTK:**
+    * Works well with output from Freesurfer. Provide fixes for issues introduced by Freesurfer
 * **FreeSurfer:**
     * Native extraction via `mri_tessellate` or `mri_mc`.
 * **PyVista:**
@@ -120,7 +119,7 @@ Mapping physiological data from NIfTI images to the generated mesh.
 
 ---
 
-## 3. Example Recipe: "The Idealized Pipeline"
+## 3. Example Recipe: "The Marius Pipeline"
 
 A hypothetical workflow to go from raw scan to a Stokes + Advection-Diffusion simulation.
 
@@ -128,12 +127,11 @@ A hypothetical workflow to go from raw scan to a Stokes + Advection-Diffusion si
     * Convert DICOM to NIfTI (`dcm2niix`).
 2.  **Segmentation:**
     * Run `mri_synthseg --i input.nii --o seg.nii` (Fast, robust).
-3.  **Surface Extraction (SVMTK):**
-    * Extract isosurfaces for GM, WM, CSF.
-    * Perform boolean unions to close ventricular holes.
-    * Preserve sulci depth.
+3.  **Surface Extraction (PyVista):**
+    * Extract isosurfaces for GM, WM, CSF and perhaps ventricles. Smooth surfaces with PyVista.
+    * Save output to `.ply` files. 
 4.  **Meshing (Ftetwild):**
-    * Generate tetrahedral mesh from the cleaned surfaces.
+    * Generate tetrahedral mesh from the cleaned surfaces using boolean (union) operations.
     * Mark subdomains (Cell tags) and boundaries (Facet tags).
 5.  **Simulation (FEniCSx):**
     * Import XDMF mesh.
