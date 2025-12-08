@@ -1,4 +1,4 @@
-# MRI-to-Mesh Pipelines for FEniCS(x)
+# MRI-to-FEM Pipelines for FEniCS(x)
 
 This document outlines the workflows used at Simula for converting raw MRI data into finite element meshes suitable for FEniCS/FEniCSx simulations. It covers current software choices, specific user pipelines, dataset locations, and future development needs.
 
@@ -8,11 +8,11 @@ A summary of who is using what, serving as a point of contact for specific varia
 
 | Contact | Meshing Engine | Segmentation Source | Dataset / Repo | Key Notes |
 | :--- | :--- | :--- | :--- | :--- |
-| **Ingvild** | Ftetwild | FreeSurfer / SynthSeg | [OpenNeuro ds004478](https://openneuro.org/datasets/ds004478) | Uses `mri2mesh`. Feature request: Node index tracking. |
-| **Andreas** | SVMTK | FreeSurfer | [SVMTK Repo](https://github.com/SVMTK/SVMTK) | Standard SVMTK pipeline. |
-| **Henrik** | Ftetwild | NeuroQuant | [Biophysics Repo](https://github.com/scientificcomputing/biophysics-anatomical-changes-mci/) | Uses a config-file driven approach. Handles NeuroQuant labels (different from FS). |
-| **Cecile** | Ftetwild | FreeSurfer / SynthSeg | [CerebroSpinalFlow](https://github.com/cdaversin/CerebroSpinalFlow) | Based on [Marius Causemann's transport repo](https://github.com/MariusCausemann/brain-PVS-SAS-transport). |
-| **Timo / Jørgen**| SVMTK / PyVista | FreeSurfer | [Gonzo](https://github.com/jorgenriseth/gonzo) | SVMTK preferred for surface preprocessing (keeps sulci better than PyVista). |
+| [**Ingvild**](https://github.com/ingvilddevold) | Ftetwild | FreeSurfer / SynthSeg | [OpenNeuro ds004478](https://openneuro.org/datasets/ds004478) | Uses `mri2mesh`. Feature request: Node index tracking. |
+| [**Andreas**](https://github.com/erasdna) | SVMTK | FreeSurfer | [SVMTK Repo](https://github.com/SVMTK/SVMTK) | Standard SVMTK pipeline. |
+| [**Henrik**](https://github.com/finsberg) | Ftetwild | NeuroQuant | [Biophysics Repo](https://github.com/scientificcomputing/biophysics-anatomical-changes-mci/) | Uses a config-file driven approach. Handles NeuroQuant labels (different from FS). |
+| [**Cecile**](https://github.com/cdaversin) | Ftetwild | FreeSurfer / SynthSeg | [CerebroSpinalFlow](https://github.com/cdaversin/CerebroSpinalFlow) | Based on [Marius Causemann's transport repo](https://github.com/MariusCausemann/brain-PVS-SAS-transport). |
+| [**Timo**](https://github.com/timokoch) / [**Jørgen**](https://github.com/jorgenriseth) | SVMTK / PyVista | FreeSurfer | [Gonzo](https://github.com/jorgenriseth/gonzo) | SVMTK preferred for surface preprocessing (keeps sulci better than PyVista). |
 
 ---
 
@@ -34,7 +34,7 @@ Aligning different image modalities (e.g., registering DTI to the T1 structural 
 
 * **[Greedy](https://www.itksnap.org/pmwiki/pmwiki.php?n=SourceCode.SourceCode):** Fast, effective for standard rigid/affine registration.
 * **[ANTs](http://stnava.github.io/ANTs/):** Gold standard for non-linear warping and complex registration.
-* **[FSL FLIRT](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FLIRT):** Robust linear registration (often used in `mri2mesh` pipelines).
+* **[FSL FLIRT](https://fsl.fmrib.ox.ac.uk/fsl/fslwiki/FLIRT):** Robust linear registration.
 
 ### Stage 3: Segmentation
 Classifying voxels into tissue types (White Matter, Gray Matter, CSF).
@@ -46,9 +46,10 @@ Classifying voxels into tissue types (White Matter, Gray Matter, CSF).
 * **Output:** `aseg.mgz`, `lh.pial`, `rh.white`.
 
 #### B. Deep Learning (SynthSeg)
-* **Command:** `mri_synthseg`
+* **Command:** `mri_synthseg` and [`recon-all-clinical`](https://surfer.nmr.mgh.harvard.edu/fswiki/recon-all-clinical)
 * **Pros:** Fast (minutes), robust to domain shifts and lower resolution scans.
 * **Cons:** Surfaces may lack the topological guarantees of FreeSurfer.
+* **Note:** Also part of [FreeSurfer](https://surfer.nmr.mgh.harvard.edu/fswiki/SynthSeg).
 
 
 #### Other alternatives we migth want to consider
@@ -86,7 +87,7 @@ Creating the tetrahedral mesh for FEniCS / FEniCSx.
 * **Cons:** Tricky to install. It is possible to install with [`pip`](https://pypi.org/project/wildmeshing/) on linux x84 and mac arm (but not linux on arm, i.e docker on arm mac). 
 * **Note:** They are also working on a [new version](https://github.com/wildmeshing/wildmeshing-toolkit), but this is not ready for us to use.
 * **Examples:**
-    * Tuturial: https://scientificcomputing.github.io/fenics-in-the-wild
+    * Tutorial: https://scientificcomputing.github.io/fenics-in-the-wild
     * https://github.com/MariusCausemann/brain-PVS-SAS-transport
 
 #### 2. SVMTK (Surface Volume Meshing Toolkit)
@@ -115,6 +116,7 @@ Mapping physiological data from NIfTI images to the generated mesh.
     * Concentration maps.
 * **Examples:**
     * https://github.com/jorgenriseth/gonzo
+    * Utility functions in [scifem](https://github.com/scientificcomputing/scifem/blob/main/src/scifem/biomedical.py)
 
 ---
 
